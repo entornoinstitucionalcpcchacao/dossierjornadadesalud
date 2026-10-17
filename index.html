@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jornada de Salud Pediátrica · Concejo Municipal de Chacao</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0C1B33;
+  --navy-deep:#0F2440;
+  --blue:#1D4ED8;
+  --blue-vivid:#3B82F6;
+  --cyan:#0EA5E9;
+  --cyan-bright:#38BDF8;
+  --cyan-pale:#CFFAFE;
+  --sky-light:#E0F2FE;
+  --cream:#F8FBFF;
+  --white:#FFFFFF;
+  --warm:#F59E0B;
+  --line:rgba(29,78,216,.12);
+  --shadow-lg:0 30px 80px -20px rgba(15,36,64,.25);
+  --shadow-md:0 16px 40px -12px rgba(15,36,64,.18);
+  --radius:22px;
+  --ease:cubic-bezier(.22,.8,.3,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::selection{background:var(--cyan);color:var(--white)}
+
+.progress{position:fixed;top:0;left:0;height:4px;width:0%;background:linear-gradient(90deg,var(--blue),var(--cyan));z-index:1000;transition:width .1s linear}
+.grid-lines{position:fixed;inset:0;pointer-events:none;z-index:0;max-width:1360px;margin:0 auto;padding:0 40px;display:flex;justify-content:space-between;opacity:.3}
+.grid-lines span{width:1px;background:linear-gradient(180deg,transparent,rgba(29,78,216,.04),transparent)}
+.reveal{opacity:0;transform:translateY(36px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+.reveal.d1{transition-delay:.1s}.reveal.d2{transition-delay:.2s}.reveal.d3{transition-delay:.3s}
+
+.side-nav{position:fixed;right:26px;top:50%;transform:translateY(-50%);z-index:900;display:flex;flex-direction:column;gap:13px}
+.side-nav a{width:11px;height:11px;border-radius:50%;border:2px solid var(--blue);background:transparent;transition:all .3s var(--ease);position:relative}
+.side-nav a:hover{background:var(--cyan);border-color:var(--cyan);transform:scale(1.3)}
+.side-nav a::after{content:attr(data-label);position:absolute;right:20px;top:50%;transform:translateY(-50%);font-family:'Space Mono',monospace;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--blue);white-space:nowrap;opacity:0;transition:opacity .3s;pointer-events:none}
+.side-nav a:hover::after{opacity:1}
+@media(max-width:960px){.side-nav{display:none}}
+
+/* Sistema de imágenes */
+.img-error-msg{color:#fca5a5;font-size:11px;text-align:center;line-height:1.7;padding:12px;font-family:'Space Mono',monospace}
+.img-error-msg b{color:#fff;font-size:10px;display:block;margin:5px 0;word-break:break-all}
+.img-error-msg span{opacity:.65;font-size:9px;display:block}
+.img-error-state{background:rgba(239,68,68,.09)!important;border-color:rgba(239,68,68,.45)!important}
+
+/* ══════════ PORTADA ══════════ */
+.cover{min-height:100vh;position:relative;overflow:hidden;
+  background:radial-gradient(ellipse 80% 60% at 15% 20%,rgba(14,165,233,.18),transparent 60%),
+  radial-gradient(ellipse 70% 70% at 85% 80%,rgba(59,130,246,.22),transparent 60%),
+  linear-gradient(160deg,#0A1628 0%,var(--navy-deep) 45%,#1A3A6B 100%);
+  display:flex;flex-direction:column;color:var(--white);padding:34px clamp(24px,5vw,70px) 44px;z-index:1}
+.orb{position:absolute;border-radius:50%;filter:blur(70px);opacity:.5;pointer-events:none}
+.orb-1{width:420px;height:420px;background:var(--cyan);top:-120px;right:-80px;opacity:.2}
+.orb-2{width:320px;height:320px;background:var(--blue-vivid);bottom:-80px;left:-60px;opacity:.25}
+
+.cover-top{display:flex;justify-content:space-between;align-items:center;gap:20px;border-bottom:1px solid rgba(255,255,255,.14);padding-bottom:22px;position:relative;z-index:2}
+.logo-slot{width:96px;height:96px;border-radius:18px;flex-shrink:0;border:1.5px dashed rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center;text-align:center;font-family:'Space Mono',monospace;font-size:9px;line-height:1.5;color:rgba(255,255,255,.65);background:rgba(255,255,255,.04);backdrop-filter:blur(6px);transition:all .3s;overflow:hidden}
+.logo-slot:hover{border-color:var(--cyan-bright);background:rgba(255,255,255,.09)}
+.logo-slot img{max-width:100%;max-height:100%;object-fit:contain;border-radius:12px}
+.cover-top-meta{flex:1;text-align:center}
+.cover-top-meta .doc-ref{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--cyan-bright)}
+.cover-top-meta .doc-line{font-size:11px;color:rgba(255,255,255,.6);margin-top:4px}
+
+.cover-main{flex:1;display:flex;align-items:center;gap:clamp(30px,5vw,80px);position:relative;z-index:2;padding:40px 0;flex-wrap:wrap}
+.cover-text{flex:1;min-width:300px}
+.kicker{display:inline-flex;align-items:center;gap:10px;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--cyan-bright);margin-bottom:26px}
+.kicker::before{content:'';width:34px;height:1px;background:var(--cyan)}
+.cover-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(38px,5.5vw,72px);line-height:1.02;letter-spacing:-1.5px}
+.cover-title em{font-family:'Playfair Display',serif;font-style:italic;font-weight:500;color:var(--cyan-bright);display:block;font-size:.52em;letter-spacing:0;margin-top:14px}
+.cover-sub{margin-top:26px;max-width:540px;color:rgba(255,255,255,.82);font-size:15px;font-weight:300}
+.cover-sub strong{color:var(--white);font-weight:600}
+.health-icon{display:inline-block;font-size:.5em;vertical-align:middle;margin-left:.2em;animation:pulse 2.6s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+
+.flyer-frame{width:min(380px,80vw);position:relative;flex-shrink:0}
+.flyer-frame::before{content:'';position:absolute;inset:-14px;border-radius:28px;border:1px solid rgba(255,255,255,.18);pointer-events:none}
+.flyer-slot{aspect-ratio:4/5;border-radius:20px;overflow:hidden;position:relative;border:1.5px dashed rgba(255,255,255,.35);background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02));backdrop-filter:blur(8px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:30px;color:rgba(255,255,255,.6);transition:all .3s}
+.flyer-slot:hover{border-color:var(--cyan-bright)}
+.flyer-slot .fs-icon{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.08);font-size:26px}
+.flyer-slot .fs-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase}
+.flyer-slot .fs-path{font-family:'Space Mono',monospace;font-size:10px;color:var(--cyan-bright)}
+.flyer-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:20px;z-index:2}
+.flyer-tag{position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);background:var(--white);color:var(--navy-deep);border-radius:100px;padding:7px 20px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;white-space:nowrap;box-shadow:var(--shadow-md);z-index:3}
+
+.cover-bottom{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.14);padding-top:22px;position:relative;z-index:2}
+.date-chip{display:flex;align-items:center;gap:16px;background:rgba(255,255,255,.08);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);border-radius:18px;padding:16px 24px}
+.date-chip .dc-icon{font-size:26px}
+.date-chip .dc-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--cyan-bright)}
+.date-chip .dc-value{font-family:'Syne',sans-serif;font-weight:700;font-size:17px}
+.cover-venue{text-align:right;font-size:12px;color:rgba(255,255,255,.7)}
+.cover-venue strong{display:block;font-family:'Syne',sans-serif;color:var(--white);font-size:15px}
+
+.cover-stats{display:flex;gap:clamp(20px,4vw,60px);margin-top:38px;flex-wrap:wrap}
+.cs-item .cs-num{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(34px,4vw,50px);line-height:1;background:linear-gradient(90deg,var(--cyan-bright),var(--cyan-pale));-webkit-background-clip:text;background-clip:text;color:transparent}
+.cs-item .cs-label{font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.75);margin-top:8px}
+.cs-item .cs-est{font-size:9px;color:rgba(255,255,255,.5);font-style:italic}
+
+/* ══════════ ÍNDICE ══════════ */
+.toc{padding:clamp(70px,9vw,130px) clamp(24px,6vw,90px);position:relative;z-index:1;background:var(--cream)}
+.toc-head{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:56px}
+.section-kicker{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--blue);display:flex;align-items:center;gap:12px}
+.section-kicker::before{content:'';width:10px;height:10px;border-radius:50%;background:var(--warm)}
+.toc-head h2{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(32px,4.5vw,56px);letter-spacing:-1px}
+.toc-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:0;border-top:1px solid var(--line)}
+.toc-item{display:flex;gap:20px;align-items:baseline;padding:26px 8px;border-bottom:1px solid var(--line);text-decoration:none;color:var(--ink);transition:all .35s var(--ease);position:relative}
+.toc-item:hover{padding-left:20px;background:linear-gradient(90deg,var(--sky-light),transparent)}
+.toc-num{font-family:'Space Mono',monospace;font-weight:700;font-size:14px;color:var(--cyan);min-width:34px}
+.toc-item h3{font-family:'Syne',sans-serif;font-weight:700;font-size:17px;letter-spacing:-.3px}
+.toc-item p{font-size:12.5px;color:#4a6180;margin-top:4px;font-weight:300}
+.toc-arrow{margin-left:auto;color:var(--blue);opacity:0;transition:all .35s;transform:translateX(-6px)}
+.toc-item:hover .toc-arrow{opacity:1;transform:none}
+
+/* ══════════ SECCIONES ══════════ */
+.section{padding:clamp(70px,9vw,130px) clamp(24px,6vw,90px);position:relative;z-index:1}
+.section--white{background:var(--white)}
+.section--light{background:var(--sky-light)}
+.section--dark{background:linear-gradient(150deg,#0A1628,var(--navy-deep) 55%,#1A3A6B);color:var(--white)}
+.section-head{max-width:820px;margin-bottom:clamp(40px,5vw,70px)}
+.section-head h2{font-family:'Syne',sans-serif;font-weight:800;letter-spacing:-1px;font-size:clamp(30px,4.2vw,52px);line-height:1.05;margin-top:18px}
+.section-head h2 em{font-family:'Playfair Display',serif;font-style:italic;font-weight:500;color:var(--cyan)}
+.section-lead{margin-top:20px;font-size:16px;color:#3a5578;max-width:640px;font-weight:300}
+.section--dark .section-lead{color:rgba(255,255,255,.78)}
+.watermark{position:absolute;top:30px;right:20px;font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(140px,22vw,300px);line-height:1;color:transparent;-webkit-text-stroke:1.5px rgba(59,130,246,.08);pointer-events:none;user-select:none;z-index:0}
+.section--dark .watermark{-webkit-text-stroke:1.5px rgba(255,255,255,.05)}
+
+.split{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(40px,6vw,90px);align-items:start;position:relative;z-index:1}
+@media(max-width:880px){.split{grid-template-columns:1fr}}
+.prose p{margin-bottom:18px;font-size:15.5px;color:#2d4a6e}
+.prose p:first-of-type::first-letter{font-family:'Playfair Display',serif;font-size:64px;float:left;line-height:.85;padding:6px 12px 0 0;color:var(--cyan);font-weight:600}
+.prose strong{color:var(--navy-deep);font-weight:600}
+.mv-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-lg);padding:34px;border:1px solid var(--line);border-top:5px solid var(--cyan);margin-bottom:22px}
+.mv-card h4{font-family:'Syne',sans-serif;font-weight:700;font-size:17px;margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.mv-card p{font-size:13.5px;color:#4a6180;font-weight:300}
+.space-banner{margin-top:34px;background:linear-gradient(120deg,var(--blue),var(--cyan));border-radius:18px;padding:26px 30px;color:var(--white);display:flex;gap:16px;align-items:center}
+.space-banner .sb-icon{font-size:30px}
+.space-banner p{font-size:14px;font-weight:500}
+.space-banner p strong{color:var(--cyan-pale)}
+
+/* Especialidades */
+.specialties{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;position:relative;z-index:1}
+.spec-card{background:var(--white);border-radius:18px;padding:30px 24px;border:1px solid var(--line);border-left:4px solid var(--cyan);transition:all .4s var(--ease);text-align:center}
+.spec-card:nth-child(2n){border-left-color:var(--blue-vivid)}
+.spec-card:nth-child(3n){border-left-color:var(--warm)}
+.spec-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-md)}
+.spec-card .sp-icon{font-size:34px;margin-bottom:14px}
+.spec-card h4{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;margin-bottom:6px}
+.spec-card p{font-size:12px;color:#4a6180;font-weight:300}
+
+/* Contexto de salud */
+.context-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(40px,6vw,80px);position:relative;z-index:1}
+@media(max-width:880px){.context-grid{grid-template-columns:1fr}}
+.context-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-lg);padding:clamp(30px,4vw,50px);border:1px solid var(--line)}
+.context-card .cc-tag{display:inline-flex;align-items:center;gap:8px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);margin-bottom:20px}
+.context-card .cc-tag::before{content:'';width:9px;height:9px;border-radius:50%;background:var(--warm)}
+.context-card h3{font-family:'Syne',sans-serif;font-weight:700;font-size:22px;margin-bottom:16px;letter-spacing:-.4px}
+.context-card p{font-size:14.5px;color:#2d4a6e;margin-bottom:16px}
+.context-card p strong{color:var(--navy-deep)}
+.context-list{display:flex;flex-direction:column;gap:16px}
+.context-item{display:flex;gap:18px;align-items:flex-start;background:var(--white);border-radius:18px;padding:22px 24px;border:1px solid var(--line);transition:all .35s var(--ease)}
+.context-item:hover{transform:translateX(8px);border-color:var(--cyan-pale);box-shadow:var(--shadow-md)}
+.context-icon{width:46px;height:46px;min-width:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:21px;background:linear-gradient(135deg,var(--sky-light),var(--cyan-pale))}
+.context-item h4{font-family:'Syne',sans-serif;font-weight:700;font-size:15.5px;margin-bottom:5px}
+.context-item p{font-size:12.5px;color:#4a6180;font-weight:300}
+.context-note{margin-top:24px;padding:18px 22px;background:var(--sky-light);border-radius:14px;font-size:12px;color:var(--blue);border-left:3px solid var(--cyan)}
+
+.quote-block{margin-top:60px;background:linear-gradient(135deg,var(--blue),var(--blue-vivid));border-radius:var(--radius);padding:clamp(36px,5vw,60px);position:relative;overflow:hidden;z-index:1}
+.quote-block::before{content:'"';position:absolute;top:-30px;left:20px;font-family:'Playfair Display',serif;font-size:260px;color:rgba(255,255,255,.12);line-height:1}
+.quote-block blockquote{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(19px,2.4vw,27px);line-height:1.55;color:var(--white);position:relative;z-index:1;max-width:820px}
+.quote-block cite{display:block;margin-top:22px;font-family:'Space Mono',monospace;font-style:normal;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--cyan-pale)}
+
+/* Valores */
+.values{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:26px;position:relative;z-index:1}
+.value-card{border-radius:var(--radius);padding:40px 32px;position:relative;overflow:hidden;background:var(--white);border:1px solid var(--line);transition:all .4s var(--ease)}
+.value-card::after{content:'';position:absolute;bottom:-40px;right:-40px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,var(--cyan-pale),transparent 70%);opacity:0;transition:opacity .4s}
+.value-card:hover{transform:translateY(-8px);box-shadow:var(--shadow-lg)}
+.value-card:hover::after{opacity:1}
+.value-card .v-icon{width:54px;height:54px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:24px;background:linear-gradient(135deg,var(--blue),var(--cyan));margin-bottom:20px}
+.value-card h4{font-family:'Syne',sans-serif;font-weight:700;font-size:18px;margin-bottom:10px}
+.value-card p{font-size:13px;color:#4a6180;font-weight:300}
+.value-card--featured{background:linear-gradient(150deg,var(--navy-deep),var(--blue));color:var(--white);grid-column:span 2}
+.value-card--featured p{color:rgba(255,255,255,.85)}
+.value-card--featured h4{color:var(--white)}
+@media(max-width:640px){.value-card--featured{grid-column:span 1}}
+
+/* Fases */
+.phases{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:0;position:relative;z-index:1;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-lg)}
+.phase{background:var(--white);padding:44px 34px;position:relative;border-right:1px solid var(--line);transition:all .4s var(--ease)}
+.phase:last-child{border-right:none}
+.phase:hover{background:linear-gradient(160deg,var(--sky-light),var(--white))}
+.phase .ph-num{font-family:'Syne',sans-serif;font-weight:800;font-size:52px;line-height:1;color:transparent;-webkit-text-stroke:1.5px var(--cyan)}
+.phase h4{font-family:'Syne',sans-serif;font-weight:700;font-size:19px;margin:18px 0 12px}
+.phase p{font-size:13px;color:#4a6180;font-weight:300}
+.phase .ph-line{width:40px;height:3px;background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:2px;margin-top:20px}
+
+/* Agenda */
+.agenda{position:relative;z-index:1;max-width:860px}
+.agenda-item{display:grid;grid-template-columns:120px 1fr;gap:26px;align-items:flex-start;padding:26px 0;border-bottom:1px solid var(--line);position:relative}
+.agenda-item::before{content:'';position:absolute;left:133px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--cyan-pale),transparent)}
+.agenda-time{font-family:'Space Mono',monospace;font-weight:700;font-size:13px;color:var(--cyan);padding-top:4px;text-align:right}
+.agenda-body{position:relative;padding-left:26px}
+.agenda-body::before{content:'';position:absolute;left:-6px;top:8px;width:12px;height:12px;border-radius:50%;background:var(--white);border:3px solid var(--cyan);box-shadow:0 0 0 4px var(--cyan-pale)}
+.agenda-body h4{font-family:'Syne',sans-serif;font-weight:700;font-size:17px;margin-bottom:6px}
+.agenda-body p{font-size:13.5px;color:#4a6180;font-weight:300;max-width:600px}
+@media(max-width:640px){.agenda-item{grid-template-columns:1fr;gap:10px}.agenda-time{text-align:left}.agenda-item::before{display:none}}
+
+/* Galería */
+.gallery{position:relative;z-index:1}
+.gallery-grid{display:grid;gap:20px}
+.gallery-grid--3{grid-template-columns:1.4fr 1fr;grid-template-rows:280px 280px}
+.gallery-grid--3 .g-item:first-child{grid-row:1/3}
+.gallery-grid--2{grid-template-columns:1fr 1fr;grid-template-rows:360px}
+.gallery-grid--1{grid-template-columns:1fr;grid-template-rows:460px;max-width:760px;margin:0 auto}
+.g-item{border-radius:20px;overflow:hidden;position:relative;border:1.5px dashed rgba(255,255,255,.4);background:linear-gradient(160deg,rgba(255,255,255,.08),rgba(255,255,255,.03));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:rgba(255,255,255,.65);transition:all .35s var(--ease)}
+.g-item:hover{border-color:var(--cyan-bright);background:rgba(255,255,255,.09)}
+.g-item img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease)}
+.g-item:hover img{transform:scale(1.04)}
+.gallery-help{margin-top:30px;padding:20px 26px;border-radius:16px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);font-family:'Space Mono',monospace;font-size:11px;line-height:2;color:rgba(255,255,255,.75)}
+.gallery-help b{color:var(--cyan-bright)}
+@media(max-width:720px){.gallery-grid--3,.gallery-grid--2{grid-template-columns:1fr;grid-template-rows:auto}.gallery-grid--3 .g-item,.gallery-grid--2 .g-item,.gallery-grid--1 .g-item{min-height:260px;grid-row:auto}}
+
+/* Stats */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:26px;position:relative;z-index:1}
+.stat{text-align:center;padding:44px 26px;border-radius:var(--radius);background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(8px);transition:all .4s var(--ease)}
+.stat:hover{transform:translateY(-6px);border-color:var(--cyan-bright);background:rgba(255,255,255,.09)}
+.stat .s-num{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(38px,4.5vw,54px);background:linear-gradient(90deg,var(--cyan-bright),var(--cyan-pale));-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1}
+.stat .s-label{margin-top:12px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.7)}
+.stat .s-est{font-size:9px;color:rgba(255,255,255,.5);font-style:italic;margin-top:4px}
+
+/* Métodos de participación */
+.methods{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:26px;position:relative;z-index:1}
+.method{background:var(--white);border-radius:var(--radius);padding:44px 34px;border:1px solid var(--line);text-align:center;position:relative;overflow:hidden;transition:all .4s var(--ease)}
+.method:hover{transform:translateY(-8px);box-shadow:var(--shadow-lg)}
+.method::before{content:'';position:absolute;top:0;left:0;width:100%;height:6px;background:linear-gradient(90deg,var(--blue),var(--cyan))}
+.method .m-icon{width:74px;height:74px;margin:0 auto 22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;background:linear-gradient(135deg,var(--sky-light),var(--cyan-pale));box-shadow:0 10px 30px -10px rgba(14,165,233,.4)}
+.method h4{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;margin-bottom:12px;letter-spacing:-.4px}
+.method p{font-size:13.5px;color:#4a6180;font-weight:300}
+.method .m-tag{display:inline-block;margin-top:18px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--cyan);background:var(--sky-light);padding:6px 14px;border-radius:100px}
+
+/* Alianzas */
+.alliance{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:26px;position:relative;z-index:1}
+.alliance-card{background:var(--white);border-radius:var(--radius);padding:38px 34px;border:1px solid var(--line);position:relative;overflow:hidden;transition:all .4s var(--ease)}
+.alliance-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:5px;background:linear-gradient(90deg,var(--blue),var(--cyan));transform:scaleX(0);transform-origin:left;transition:transform .45s var(--ease)}
+.alliance-card:hover{transform:translateY(-7px);box-shadow:var(--shadow-lg)}
+.alliance-card:hover::before{transform:scaleX(1)}
+.alliance-card .a-icon{font-size:30px;margin-bottom:18px}
+.alliance-card h4{font-family:'Syne',sans-serif;font-weight:700;font-size:18px;margin-bottom:10px}
+.alliance-card p{font-size:13px;color:#4a6180;font-weight:300}
+.alliance-card .a-type{display:inline-block;margin-top:18px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--cyan);background:var(--sky-light);padding:5px 14px;border-radius:100px}
+
+/* Beneficios */
+.benefits{position:relative;z-index:1;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px}
+.benefit{padding:30px 28px;border-radius:18px;background:var(--white);border:1px solid var(--line);display:flex;gap:18px;align-items:flex-start;transition:all .35s var(--ease)}
+.benefit:hover{transform:translateY(-5px);box-shadow:var(--shadow-md);border-color:var(--cyan-pale)}
+.benefit .b-dot{width:14px;height:14px;min-width:14px;border-radius:50%;margin-top:5px;background:var(--warm);box-shadow:0 0 0 5px var(--cyan-pale)}
+.benefit:nth-child(2n) .b-dot{background:var(--cyan);box-shadow:0 0 0 5px var(--sky-light)}
+.benefit:nth-child(3n) .b-dot{background:var(--blue-vivid);box-shadow:0 0 0 5px var(--sky-light)}
+.benefit h4{font-family:'Syne',sans-serif;font-weight:700;font-size:15.5px;margin-bottom:6px}
+.benefit p{font-size:12.5px;color:#4a6180;font-weight:300}
+.benefit--featured{background:linear-gradient(140deg,var(--navy-deep),var(--blue));border:none;color:var(--white)}
+.benefit--featured h4{color:var(--white)}
+.benefit--featured p{color:rgba(255,255,255,.85)}
+
+/* Protocolo */
+.protocol{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px;position:relative;z-index:1}
+.proto-card{background:var(--white);border-radius:18px;padding:30px;border:1px solid var(--line);border-left:5px solid var(--cyan);transition:all .35s var(--ease)}
+.proto-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-md)}
+.proto-card .pc-num{font-family:'Space Mono',monospace;font-weight:700;color:var(--cyan);font-size:13px}
+.proto-card h4{font-family:'Syne',sans-serif;font-weight:700;font-size:17px;margin:10px 0 8px}
+.proto-card p{font-size:13px;color:#4a6180;font-weight:300}
+.proto-alert{margin-top:30px;background:var(--sky-light);border-radius:16px;padding:22px 28px;display:flex;gap:16px;align-items:center;border-left:5px solid var(--warm)}
+.proto-alert .pa-icon{font-size:26px}
+.proto-alert p{font-size:13.5px;color:var(--navy-deep)}
+
+/* Agradecimiento */
+.thanks{max-width:820px;margin:0 auto;text-align:center;position:relative;z-index:1}
+.thanks .t-icon{width:70px;height:70px;border-radius:50%;margin:0 auto 34px;background:linear-gradient(135deg,var(--blue),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:32px;box-shadow:0 12px 40px rgba(14,165,233,.35);animation:pulse 3s infinite}
+.thanks h2{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(30px,4vw,46px);letter-spacing:-1px}
+.thanks .t-sub{font-family:'Playfair Display',serif;font-style:italic;color:var(--cyan);font-size:20px;margin:12px 0 34px}
+.thanks p{font-size:15.5px;color:#2d4a6e;margin-bottom:20px;text-align:center}
+.thanks p strong{color:var(--navy-deep)}
+.thanks-sign{margin-top:48px;padding-top:34px;border-top:1px solid var(--line)}
+.thanks-sign .ts-name{font-family:'Playfair Display',serif;font-weight:600;font-size:20px;color:var(--navy-deep)}
+.thanks-sign .ts-role{font-size:13px;color:#4a6180;margin-top:4px}
+.thanks-sign .ts-org{margin-top:10px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--cyan)}
+
+/* Contacto */
+.contact{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:22px;position:relative;z-index:1;max-width:900px;margin:0 auto}
+.contact-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);border-radius:18px;padding:28px;text-align:center;backdrop-filter:blur(6px);transition:all .35s var(--ease)}
+.contact-card:hover{border-color:var(--cyan-bright);transform:translateY(-5px)}
+.contact-card .cc-icon{font-size:28px;margin-bottom:12px}
+.contact-card .cc-label{font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:2px;text-transform:uppercase;color:var(--cyan-bright);margin-bottom:8px}
+.contact-card .cc-value{font-size:14px;font-weight:600;color:var(--white);word-break:break-word}
+
+/* Contraportada */
+.back-cover{background:linear-gradient(160deg,#0A1628,var(--navy-deep));color:var(--white);padding:clamp(70px,9vw,120px) clamp(24px,6vw,90px);text-align:center;position:relative;overflow:hidden;z-index:1}
+.back-cover h2{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(26px,4vw,44px);letter-spacing:-1px;max-width:760px;margin:0 auto;position:relative;z-index:1}
+.back-cover h2 em{font-family:'Playfair Display',serif;font-style:italic;font-weight:500;color:var(--cyan-bright)}
+.back-cover .bc-phrase{margin-top:26px;font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(16px,2vw,20px);color:rgba(255,255,255,.85);position:relative;z-index:1}
+.back-cover .bc-logos{display:flex;justify-content:center;gap:26px;margin-top:56px;position:relative;z-index:1;flex-wrap:wrap}
+.back-cover .logo-slot{border-color:rgba(255,255,255,.3)}
+.back-cover .bc-org{margin-top:44px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--cyan-bright);position:relative;z-index:1;line-height:2}
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+<div class="grid-lines" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+
+<nav class="side-nav" aria-label="Índice del dossier">
+  <a href="#portada" data-label="Portada"></a>
+  <a href="#resumen" data-label="Resumen"></a>
+  <a href="#contexto" data-label="Contexto"></a>
+  <a href="#valores" data-label="Valores"></a>
+  <a href="#especialidades" data-label="Especialidades"></a>
+  <a href="#agenda" data-label="Programa"></a>
+  <a href="#galeria" data-label="Galería"></a>
+  <a href="#impacto" data-label="Impacto"></a>
+  <a href="#participacion" data-label="Participación"></a>
+  <a href="#alianza" data-label="Alianza"></a>
+  <a href="#beneficios" data-label="Beneficios"></a>
+  <a href="#protocolo" data-label="Protocolo"></a>
+  <a href="#agradecimiento" data-label="Cierre"></a>
+</nav>
+
+<!-- ═══════════════════ PORTADA ═══════════════════ -->
+<section class="cover" id="portada">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <div class="cover-top">
+    <div class="logo-slot">
+      <img data-base="assets/logo-1" alt="Comisión de Participación Ciudadana">
+    </div>
+    <div class="cover-top-meta">
+      <div class="doc-ref">Dossier Institucional · Jornada de Salud · CPC-2026</div>
+      <div class="doc-line">Concejo Municipal de Chacao · Comisión Permanente de Participación Ciudadana</div>
+    </div>
+    <div class="logo-slot">
+      <img data-base="assets/logo-2" alt="Despacho de la Concejal">
+    </div>
+  </div>
+
+  <div class="cover-main">
+    <div class="cover-text">
+      <div class="kicker">Salud Comunitaria</div>
+      <h1 class="cover-title">
+        Jornada de Salud<span class="health-icon">🩺</span><br>Pediátrica
+        <em>Atención médica especializada para nuestros niños y niñas</em>
+      </h1>
+      <p class="cover-sub">
+        Un operativo de atención médica integral que lleva <strong>10 puestos de atención pediátrica y especializada</strong>
+        directamente al <strong>sector popular Bello Campo</strong>, garantizando el derecho a la salud de la infancia de Chacao.
+      </p>
+      <div class="cover-stats">
+        <div class="cs-item"><div class="cs-num">10</div><div class="cs-label">Puestos de Atención</div></div>
+        <div class="cs-item"><div class="cs-num">+300</div><div class="cs-label">Niños Estimados</div><div class="cs-est">*cifra por confirmar</div></div>
+        <div class="cs-item"><div class="cs-num">8</div><div class="cs-label">Especialidades</div></div>
+      </div>
+    </div>
+
+    <div class="flyer-frame">
+      <div class="flyer-slot">
+        <div class="fs-icon">🏥</div>
+        <div class="fs-label">Flyer Oficial</div>
+        <div class="fs-path">assets / flyer.[ext]</div>
+        <div style="font-size:10px;opacity:.7">Se mostrará aquí automáticamente</div>
+        <img data-base="assets/flyer" data-optional alt="Flyer oficial de la Jornada de Salud Pediátrica">
+      </div>
+      <div class="flyer-tag">✦ Jornada de Salud ✦</div>
+    </div>
+  </div>
+
+  <div class="cover-bottom">
+    <div class="date-chip">
+      <div class="dc-icon">📅</div>
+      <div>
+        <div class="dc-label">Fecha de la Jornada</div>
+        <div class="dc-value">14 de Noviembre de 2026</div>
+      </div>
+    </div>
+    <div class="cover-venue">
+      <strong>Sector Popular Bello Campo</strong>
+      Chacao, Estado Miranda · República Bolivariana de Venezuela
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ ÍNDICE ═══════════════════ -->
+<section class="toc" id="indice">
+  <div class="toc-head reveal">
+    <div>
+      <div class="section-kicker">Contenido del Dossier</div>
+      <h2>Índice Editorial</h2>
+    </div>
+    <div style="font-family:'Space Mono',monospace;font-size:11px;color:#8a7aa5">Jornada de Salud Pediátrica · 13 apartados</div>
+  </div>
+  <div class="toc-list">
+    <a class="toc-item reveal" href="#resumen"><span class="toc-num">01</span><div><h3>Resumen Ejecutivo</h3><p>Definición, justificación y alcance de la jornada.</p></div><span class="toc-arrow">→</span></a>
+    <a class="toc-item reveal" href="#contexto"><span class="toc-num">02</span><div><h3>Contexto y Necesidad</h3><p>La salud pediátrica como derecho y prioridad social.</p></div><span class="toc-arrow">→</span></a>
+    <a class="toc-item reveal" href="#valores"><span class="toc-num">03</span><div><h3>Valores y Principios</h3><p>Los fundamentos éticos de la jornada.</p></div><span class="toc-arrow">→</span></a>
+    <a class="toc-item reveal" href="#especialidades"><span class="toc-num">04</span><div><h3>Especialidades Médicas</h3><p>Los 10 puestos de atención y sus servicios.</p></div><span class="toc-arrow">→</span></a>
+    <a class="toc-item reveal" href="#estructura"><span class="toc-num">05</span><div><h3>Estructura General</h3><p>Fases de planificación y ejecución.</p></div><span class="toc-arrow">→</span></a>
+    <a class="toc-item reveal" href="#agenda"><span class="toc-num">06</span><div><h3>Programa de la Jornada</h3><p>Agenda detallada del operativo.</p></div><span class="toc-arrow">→</span></a>
+    <a class="toc-item reveal" href="#galeria"><span class="toc-num">07</span><div><h3>Galería Visual</h3><p>Registro fotográfico adaptable.</p></div><span class="toc-arrow">→</span></a>
+    <a class="toc-item reveal" href="#impacto"><span class="toc-num">08</span><div><h3>Alcance e Impacto</h3><p>Cifras estimadas y proyección social.</p></div><span class="toc-arrow">→</span></a>
+    <a class="toc-item reveal" href="#participacion"><span class="toc-num">09</span><div><h3>Métodos de Participación</h3><p>Stands · Donativos · Patrocinios.</p></div><span class="toc-arrow">→</span></a>
+    <a class="toc-item reveal" href="#alianza"><span class="toc-num">10</span><div><h3>Propuesta de Alianza</h3><p>Modalidades de contribución estratégica.</p></div><span class="toc-arrow">→</span></a>
+    <a class="toc-item reveal" href="#beneficios"><span class="toc-num">11</span><div><h3>Beneficios de Marca</h3><p>Retorno y visibilidad para aliados.</p></div><span class="toc-arrow">→</span></a>
+    <a class="toc-item reveal" href="#protocolo"><span class="toc-num">12</span><div><h3>Protocolo y Logística</h3><p>Un operativo seguro y coordinado.</p></div><span class="toc-arrow">→</span></a>
+    <a class="toc-item reveal" href="#agradecimiento"><span class="toc-num">13</span><div><h3>Palabras de la Comisión</h3><p>Agradecimiento institucional y contacto.</p></div><span class="toc-arrow">→</span></a>
+  </div>
+</section>
+
+<!-- ═══════════════════ 01 · RESUMEN EJECUTIVO ═══════════════════ -->
+<section class="section section--white" id="resumen">
+  <div class="watermark">01</div>
+  <div class="section-head reveal">
+    <div class="section-kicker">01 · Resumen Ejecutivo</div>
+    <h2>Salud especializada al alcance de <em>nuestra infancia</em></h2>
+  </div>
+  <div class="split">
+    <div class="prose reveal d1">
+      <p>La <strong>Comisión Permanente de Participación Ciudadana del Concejo Municipal de Chacao</strong> presenta el presente Dossier de Alianzas Institucionales para la <strong>Jornada de Salud Pediátrica</strong>, un operativo de atención médica integral que se desarrollará el <strong>14 de noviembre de 2026</strong> en el <strong>sector popular Bello Campo</strong>.</p>
+      <p><strong>Definición de la actividad.</strong> Esta Jornada de Salud es un despliegue médico-asistencial que instala <strong>10 puestos de atención pediátrica y especializada</strong> en pleno corazón de una comunidad popular, ofreciendo consultas gratuitas en neumonología, cardiología, neurología, nutrición, odontología, ortopedia, oftalmología, pediatría general, vacunación y psicología infantil.</p>
+      <p><strong>Justificación.</strong> El acceso a la atención médica especializada sigue siendo una barrera para miles de familias en sectores populares. Muchos niños y niñas no reciben diagnóstico oportuno en áreas como cardiología, neurología u oftalmología por el costo de las consultas privadas. Esta jornada elimina esa barrera, llevando los especialistas directamente a la comunidad.</p>
+      <p>Más que un operativo médico, esta jornada está concebida como un <strong>espacio de encuentro comunitario y articulación institucional</strong>: un punto de convergencia donde aliados del sector salud, empresas privadas, fundaciones, autoridades municipales y la comunidad trabajan juntos por el bienestar de la infancia.</p>
+    </div>
+    <aside class="reveal d2">
+      <div class="mv-card">
+        <h4>🎯 Misión</h4>
+        <p>Brindar atención médica pediátrica especializada y gratuita a los niños y niñas del sector Bello Campo, detectando oportunamente patologías y promoviendo la prevención como pilar de la salud infantil.</p>
+      </div>
+      <div class="mv-card" style="border-top-color:var(--blue-vivid)">
+        <h4>🌟 Visión</h4>
+        <p>Consolidar un modelo replicable de jornadas de salud comunitaria que garantice el derecho constitucional a la salud, fortaleciendo el vínculo entre instituciones, profesionales médicos y comunidades populares.</p>
+      </div>
+      <div class="space-banner">
+        <div class="sb-icon">🤝</div>
+        <p><strong>Espacio de articulación</strong> para aliados del sector salud, empresas, fundaciones, autoridades y comunidad: una oportunidad de impacto social directo y medible.</p>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- ═══════════════════ 02 · CONTEXTO ═══════════════════ -->
+<section class="section section--light" id="contexto">
+  <div class="watermark">02</div>
+  <div class="section-head reveal">
+    <div class="section-kicker">02 · Contexto y Necesidad</div>
+    <h2>La salud infantil como <em>prioridad social</em></h2>
+  </div>
+  <div class="context-grid">
+    <div class="context-card reveal d1">
+      <span class="cc-tag">Marco de acción</span>
+      <h3>¿Por qué una jornada de salud en Bello Campo?</h3>
+      <p>El acceso a la atención médica especializada es uno de los desafíos más urgentes para las familias de sectores populares. Consultas con cardiólogos, neurólogos, neumonólogos u oftalmólogos representan un costo que muchas familias no pueden asumir, lo que retrasa diagnósticos y tratamientos oportunos.</p>
+      <p>La <strong>Jornada de Salud Pediátrica</strong> responde directamente a esta realidad: lleva un equipo multidisciplinario de especialistas hasta la comunidad, eliminando barreras económicas, geográficas y logísticas que impiden la atención temprana.</p>
+      <p>La detección oportuna de condiciones como cardiopatías congénitas, trastornos neurológicos, problemas respiratorios crónicos, deficiencias visuales y desnutrición puede <strong>cambiar radicalmente el pronóstico de vida</strong> de un niño o niña. Cada consulta realizada en esta jornada es una oportunidad de intervención temprana.</p>
+      <p>Además, la jornada integra componentes de <strong>prevención, educación sanitaria y seguimiento</strong>, asegurando que la atención no se limite a un día, sino que genere capacidades instaladas en la comunidad.</p>
+      <div class="context-note">📋 <b>Nota para el equipo:</b> completar con datos estadísticos locales de salud pediátrica en Chacao y Bello Campo cuando estén disponibles.</div>
+    </div>
+    <div class="context-list">
+      <div class="context-item reveal"><div class="context-icon">🫀</div><div><h4>Detección temprana</h4><p>Identificar cardiopatías, trastornos neurológicos y respiratorios antes de que se agraven.</p></div></div>
+      <div class="context-item reveal d1"><div class="context-icon">👁️</div><div><h4>Salud visual y bucal</h4><p>Evaluaciones oftalmológicas y odontológicas que previenen complicaciones futuras.</p></div></div>
+      <div class="context-item reveal d2"><div class="context-icon">🥗</div><div><h4>Nutrición infantil</h4><p>Control del estado nutricional y orientación alimentaria para el crecimiento saludable.</p></div></div>
+      <div class="context-item reveal d3"><div class="context-icon">💉</div><div><h4>Vacunación al día</h4><p>Actualización del esquema de inmunización para proteger contra enfermedades prevenibles.</p></div></div>
+      <div class="context-item reveal d3"><div class="context-icon">🧠</div><div><h4>Salud mental infantil</h4><p>Detección de trastornos del desarrollo, ansiedad y dificultades de aprendizaje.</p></div></div>
+    </div>
+  </div>
+  <div class="quote-block reveal">
+    <blockquote>Un niño que recibe diagnóstico oportuno es un niño con futuro. Llevar la medicina especializada a las comunidades no es caridad: es justicia social y cumplimiento del derecho constitucional a la salud.</blockquote>
+    <cite>— Comisión Permanente de Participación Ciudadana · Concejo Municipal de Chacao</cite>
+  </div>
+</section>
+
+<!-- ═══════════════════ 03 · VALORES ═══════════════════ -->
+<section class="section section--white" id="valores">
+  <div class="watermark">03</div>
+  <div class="section-head reveal">
+    <div class="section-kicker">03 · Valores y Principios Fundamentales</div>
+    <h2>Los fundamentos <em>éticos</em> de la jornada</h2>
+  </div>
+  <div class="values">
+    <div class="value-card value-card--featured reveal">
+      <div class="v-icon">🏥</div>
+      <h4>Derecho a la Salud Infantil</h4>
+      <p>Garantizar que todos los niños y niñas, <strong style="color:var(--cyan-pale)">independientemente de su condición socioeconómica</strong>, tengan acceso a atención médica especializada de calidad. La salud no es un privilegio: es un derecho que el Estado y la sociedad deben garantizar de forma activa y tangible.</p>
+    </div>
+    <div class="value-card reveal d1"><div class="v-icon">🌍</div><h4>Equidad Territorial</h4><p>Llevar los servicios de salud directamente a los sectores populares, eliminando barreras geográficas y económicas de acceso.</p></div>
+    <div class="value-card reveal d2"><div class="v-icon">🔬</div><h4>Prevención y Detección Temprana</h4><p>Priorizar el diagnóstico oportuno como herramienta más efectiva para proteger la salud y el desarrollo infantil.</p></div>
+    <div class="value-card reveal d3"><div class="v-icon">🤝</div><h4>Articulación Interinstitucional</h4><p>Unir esfuerzos entre el sector público, profesionales de la salud, empresas privadas y fundaciones para maximizar el impacto.</p></div>
+    <div class="value-card reveal d3"><div class="v-icon">🔍</div><h4>Transparencia y Cooperación</h4><p>Construir puentes sólidos, auditables y de mutuo beneficio entre todos los actores involucrados en la jornada.</p></div>
+  </div>
+</section>
+
+<!-- ═══════════════════ 04 · ESPECIALIDADES ═══════════════════ -->
+<section class="section section--light" id="especialidades">
+  <div class="watermark">04</div>
+  <div class="section-head reveal">
+    <div class="section-kicker">04 · Especialidades Médicas</div>
+    <h2>10 puestos de <em>atención integral</em></h2>
+    <p class="section-lead">Un equipo multidisciplinario de especialistas al servicio de la infancia de Bello Campo.</p>
+  </div>
+  <div class="specialties">
+    <div class="spec-card reveal"><div class="sp-icon">👶</div><h4>Pediatría General</h4><p>Control de niño sano, evaluación del crecimiento y desarrollo, orientación a padres.</p></div>
+    <div class="spec-card reveal d1"><div class="sp-icon">🫁</div><h4>Neumonología</h4><p>Evaluación respiratoria, detección de asma, bronquitis y afecciones pulmonares.</p></div>
+    <div class="spec-card reveal d2"><div class="sp-icon">🫀</div><h4>Cardiología</h4><p>Detección de cardiopatías congénitas, soplos y alteraciones del ritmo cardíaco.</p></div>
+    <div class="spec-card reveal d3"><div class="sp-icon">🧠</div><h4>Neurología</h4><p>Evaluación del neurodesarrollo, detección de trastornos neurológicos infantiles.</p></div>
+    <div class="spec-card reveal"><div class="sp-icon">🥗</div><h4>Nutrición</h4><p>Control del estado nutricional, orientación alimentaria y seguimiento del crecimiento.</p></div>
+    <div class="spec-card reveal d1"><div class="sp-icon">🦷</div><h4>Odontología</h4><p>Evaluación bucal, prevención de caries, higiene dental y orientación ortodóntica.</p></div>
+    <div class="spec-card reveal d2"><div class="sp-icon">🦴</div><h4>Ortopedia</h4><p>Evaluación musculoesquelética, detección de escoliosis, pie plano y alteraciones posturales.</p></div>
+    <div class="spec-card reveal d3"><div class="sp-icon">👁️</div><h4>Oftalmología</h4><p>Evaluación visual, detección de ametropías, estrabismo y patologías oculares.</p></div>
+    <div class="spec-card reveal"><div class="sp-icon">💉</div><h4>Vacunación</h4><p>Actualización del esquema de inmunización y protección contra enfermedades prevenibles.</p></div>
+    <div class="spec-card reveal d1"><div class="sp-icon">🧩</div><h4>Psicología Infantil</h4><p>Detección de trastornos del desarrollo, dificultades de aprendizaje y salud emocional.</p></div>
+  </div>
+</section>
+
+<!-- ═══════════════════ 05 · ESTRUCTURA ═══════════════════ -->
+<section class="section section--white" id="estructura">
+  <div class="watermark">05</div>
+  <div class="section-head reveal">
+    <div class="section-kicker">05 · Estructura General</div>
+    <h2>Una jornada en <em>tres fases</em></h2>
+    <p class="section-lead">Planificación, ejecución y seguimiento para garantizar el máximo impacto comunitario.</p>
+  </div>
+  <div class="phases">
+    <div class="phase reveal"><div class="ph-num">I</div><h4>Convocatoria y Pre-Jornada</h4><p>Censo comunitario de niños y niñas en Bello Campo, difusión de la jornada, coordinación con líderes comunitarios y organización logística de los puestos de atención.</p><div class="ph-line"></div></div>
+    <div class="phase reveal d1"><div class="ph-num">II</div><h4>Jornada de Atención</h4><p>Despliegue de los 10 puestos de atención médica en el sector Bello Campo: consultas especializadas, vacunación, orientación nutricional y actividades de educación sanitaria.</p><div class="ph-line"></div></div>
+    <div class="phase reveal d2"><div class="ph-num">III</div><h4>Seguimiento y Referencias</h4><p>Entrega de informes médicos, referencias a centros de salud para casos que requieran atención continuada y articulación con el sistema de salud municipal.</p><div class="ph-line"></div></div>
+  </div>
+</section>
+
+<!-- ═══════════════════ 06 · PROGRAMA ═══════════════════ -->
+<section class="section section--light" id="agenda">
+  <div class="watermark">06</div>
+  <div class="section-head reveal">
+    <div class="section-kicker">06 · Programa de la Jornada</div>
+    <h2>Agenda del <em>operativo</em></h2>
+    <p class="section-lead">Sector Popular Bello Campo · Sábado 14 de noviembre de 2026 · Horario estimado: 7:00 AM – 4:00 PM.</p>
+  </div>
+  <div class="agenda">
+    <div class="agenda-item reveal"><div class="agenda-time">06:00 – 07:00</div><div class="agenda-body"><h4>Montaje y Logística</h4><p>Instalación de los 10 puestos de atención, carpas, equipos médicos, señalización y adecuación del espacio en Bello Campo.</p></div></div>
+    <div class="agenda-item reveal"><div class="agenda-time">07:00 – 07:30</div><div class="agenda-body"><h4>Recepción y Registro</h4><p>Bienvenida de las familias, registro de niños y niñas, entrega de fichas de atención y organización por especialidad.</p></div></div>
+    <div class="agenda-item reveal"><div class="agenda-time">07:30 – 08:00</div><div class="agenda-body"><h4>Apertura Institucional</h4><p>Palabras de las autoridades del Concejo Municipal de Chacao, la Comisión de Participación Ciudadana y los equipos médicos aliados.</p></div></div>
+    <div class="agenda-item reveal"><div class="agenda-time">08:00 – 12:30</div><div class="agenda-body"><h4>Consultas Médicas Especializadas</h4><p>Atención simultánea en los 10 puestos: pediatría general, neumonología, cardiología, neurología, nutrición, odontología, ortopedia, oftalmología, vacunación y psicología infantil.</p></div></div>
+    <div class="agenda-item reveal"><div class="agenda-time">12:30 – 13:30</div><div class="agenda-body"><h4>Educación Sanitaria y Recreación</h4><p>Charlas de prevención, higiene bucal, nutrición infantil y actividades recreativas para los niños mientras esperan sus consultas.</p></div></div>
+    <div class="agenda-item reveal"><div class="agenda-time">13:30 – 15:30</div><div class="agenda-body"><h4>Continuación de Consultas y Referencias</h4><p>Segunda ronda de atención, entrega de informes médicos, indicaciones de tratamiento y referencias a centros de salud para seguimiento.</p></div></div>
+    <div class="agenda-item reveal"><div class="agenda-time">15:30 – 16:00</div><div class="agenda-body"><h4>Cierre y Reconocimientos</h4><p>Agradecimientos a médicos, voluntarios y aliados. Balance de la jornada, foto institucional y desmovilización ordenada.</p></div></div>
+  </div>
+</section>
+
+<!-- ═══════════════════ 07 · GALERÍA ═══════════════════ -->
+<section class="section section--dark" id="galeria">
+  <div class="watermark">07</div>
+  <div class="orb orb-1"></div>
+  <div class="section-head reveal">
+    <div class="section-kicker" style="color:var(--cyan-bright)">07 · Galería Visual</div>
+    <h2>Memoria en <em style="color:var(--cyan-bright)">imágenes</em></h2>
+    <p class="section-lead">Un registro del compromiso, la atención y la esperanza que definen esta jornada.</p>
+  </div>
+  <div class="gallery reveal d1">
+    <div class="gallery-grid gallery-grid--3">
+      <div class="g-item"><img data-base="assets/foto-1" alt="Atención médica pediátrica"></div>
+      <div class="g-item"><img data-base="assets/foto-2" alt="Consulta especializada"></div>
+      <div class="g-item"><img data-base="assets/foto-3" alt="Comunidad de Bello Campo"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ 08 · IMPACTO ═══════════════════ -->
+<section class="section section--dark" id="impacto">
+  <div class="watermark">08</div>
+  <div class="orb orb-2"></div>
+  <div class="section-head reveal">
+    <div class="section-kicker" style="color:var(--cyan-bright)">08 · Alcance e Impacto</div>
+    <h2>Cifras <em style="color:var(--cyan-bright)">estimadas</em> de la jornada</h2>
+    <p class="section-lead">Proyección operativa sujeta a confirmación según el censo comunitario y la capacidad de atención.</p>
+  </div>
+  <div class="stats">
+    <div class="stat reveal"><div class="s-num">+300</div><div class="s-label">Niños atendidos</div><div class="s-est">*cifra estimada</div></div>
+    <div class="stat reveal d1"><div class="s-num">10</div><div class="s-label">Puestos de atención</div></div>
+    <div class="stat reveal d2"><div class="s-num">8</div><div class="s-label">Especialidades médicas</div></div>
+    <div class="stat reveal d3"><div class="s-num">+20</div><div class="s-label">Profesionales de salud</div><div class="s-est">*cifra estimada</div></div>
+    <div class="stat reveal d2"><div class="s-num">+500</div><div class="s-label">Consultas realizadas</div><div class="s-est">*proyección total</div></div>
+  </div>
+</section>
+
+<!-- ═══════════════════ 09 · MÉTODOS DE PARTICIPACIÓN ═══════════════════ -->
+<section class="section section--white" id="participacion">
+  <div class="watermark">09</div>
+  <div class="section-head reveal">
+    <div class="section-kicker">09 · Métodos de Participación</div>
+    <h2>Tres formas de <em>sumarse</em></h2>
+    <p class="section-lead">Invitamos a instituciones de salud, empresas, fundaciones, comerciantes y comunidad a ser parte de esta jornada.</p>
+  </div>
+  <div class="methods">
+    <div class="method reveal"><div class="m-icon">🏪</div><h4>Stands</h4><p>Espacios institucionales y comerciales para aliados durante la jornada, con interacción directa con la comunidad y las familias asistentes.</p><span class="m-tag">Presencia en el evento</span></div>
+    <div class="method reveal d1"><div class="m-icon">🎁</div><h4>Donativos</h4><p>Contribuciones financieras o aportes en especie: insumos médicos, medicamentos, materiales de higiene, refrigerios y recursos logísticos.</p><span class="m-tag">Aportes no monetarios</span></div>
+    <div class="method reveal d2"><div class="m-icon">🤝</div><h4>Patrocinios</h4><p>Alianzas estratégicas con visibilidad de marca, reconocimiento público institucional y beneficios exclusivos para los patrocinadores.</p><span class="m-tag">Alianza estratégica</span></div>
+  </div>
+</section>
+
+<!-- ═══════════════════ 10 · PROPUESTA DE ALIANZA ═══════════════════ -->
+<section class="section section--light" id="alianza">
+  <div class="watermark">10</div>
+  <div class="section-head reveal">
+    <div class="section-kicker">10 · Propuesta de Alianza</div>
+    <h2>Modalidades de <em>contribución</em></h2>
+    <p class="section-lead">Buscamos aliados estratégicos en las siguientes modalidades, las cuales pueden ser cubiertas mediante donaciones financieras o aportes en especie (Aportes No Monetarios).</p>
+  </div>
+  <div class="alliance">
+    <div class="alliance-card reveal"><div class="a-icon">🩺</div><h4>Equipos e Insumos Médicos</h4><p>Donación de tensiómetros, estetoscopios, oxímetros, básculas pediátricas, insumos odontológicos, material oftalmológico y consumibles clínicos.</p><span class="a-type">Especie</span></div>
+    <div class="alliance-card reveal d1"><div class="a-icon">💊</div><h4>Medicamentos y Tratamientos</h4><p>Aporte de medicamentos esenciales pediátricos, vitaminas, desparasitantes, antibióticos y tratamientos indicados por los especialistas.</p><span class="a-type">Especie / Financiero</span></div>
+    <div class="alliance-card reveal d2"><div class="a-icon">🏥</div><h4>Logística y Montaje</h4><p>Financiamiento de carpas, mesas, sillas, señalización, refrigeración de vacunas y adecuación del espacio en Bello Campo.</p><span class="a-type">Financiero / Especie</span></div>
+    <div class="alliance-card reveal d3"><div class="a-icon">🍎</div><h4>Refrigerios e Hidratación</h4><p>Patrocinio de alimentos, meriendas saludables, agua y bebidas para los niños, familias y equipo médico durante la jornada.</p><span class="a-type">Especie / Financiero</span></div>
+    <div class="alliance-card reveal d2"><div class="a-icon">📢</div><h4>Difusión y Campaña</h4><p>Respaldo a la campaña comunicacional para garantizar la asistencia masiva de familias del sector Bello Campo y comunidades aledañas.</p><span class="a-type">Financiero / Especie</span></div>
+    <div class="alliance-card reveal d3"><div class="a-icon">👨‍⚕️</div><h4>Personal Médico Voluntario</h4><p>Incorporación de profesionales de la salud (médicos, enfermeras, odontólogos, psicólogos) como voluntarios en los puestos de atención.</p><span class="a-type">Voluntariado</span></div>
+  </div>
+</section>
+
+<!-- ═══════════════════ 11 · BENEFICIOS ═══════════════════ -->
+<section class="section section--white" id="beneficios">
+  <div class="watermark">11</div>
+  <div class="section-head reveal">
+    <div class="section-kicker">11 · Beneficios e Impacto de Marca</div>
+    <h2>Retorno para <em>nuestros aliados</em></h2>
+  </div>
+  <div class="benefits">
+    <div class="benefit benefit--featured reveal"><span class="b-dot"></span><div><h4>Mención Especial</h4><p>Mención especial y destacada de la marca aliada durante la apertura, el cierre y en todos los actos públicos de la Jornada de Salud Pediátrica.</p></div></div>
+    <div class="benefit benefit--featured reveal d1"><span class="b-dot"></span><div><h4>Reconocimiento Público Institucional</h4><p>Reconocimiento formal y público por parte del Concejo Municipal de Chacao, con entrega de distinción a los aliados estratégicos del sector salud.</p></div></div>
+    <div class="benefit benefit--featured reveal d2"><span class="b-dot"></span><div><h4>Asistencia con Trámites Municipales</h4><p>Acompañamiento y orientación preferencial en trámites administrativos ante el Concejo Municipal y las instancias correspondientes.</p></div></div>
+    <div class="benefit reveal"><span class="b-dot"></span><div><h4>Presencia en campaña oficial</h4><p>Inclusión del logotipo en toda la campaña digital e impresa de la jornada: flyers, banners, redes sociales y material promocional.</p></div></div>
+    <div class="benefit reveal d1"><span class="b-dot"></span><div><h4>Visibilidad en el operativo</h4><p>Presencia destacada con pendones y backings en los puestos de atención, con mención expresa en las notas de prensa institucionales.</p></div></div>
+    <div class="benefit reveal d2"><span class="b-dot"></span><div><h4>Espacio de stand</h4><p>Disposición de un espacio de stand institucional o comercial durante la jornada, con interacción directa con las familias asistentes.</p></div></div>
+    <div class="benefit reveal d3"><span class="b-dot"></span><div><h4>Padrinazgo de especialidad</h4><p>Apadrinar un puesto de atención específico (ej. "Puesto de Oftalmología patrocinado por Empresa X"), con presencia en la señalización y mención durante la jornada.</p></div></div>
+    <div class="benefit reveal d2"><span class="b-dot"></span><div><h4>Contenido en redes sociales</h4><p>Inclusión del logotipo en el bloque de agradecimientos y publicaciones destacadas en las redes oficiales del Concejo Municipal.</p></div></div>
+    <div class="benefit reveal d3"><span class="b-dot"></span><div><h4>Memoria fotográfica y audiovisual</h4><p>Inclusión en la memoria oficial del evento y acceso al material audiovisual para la comunicación de RSE propia de la marca.</p></div></div>
+  </div>
+</section>
+
+<!-- ═══════════════════ 12 · PROTOCOLO ═══════════════════ -->
+<section class="section section--light" id="protocolo">
+  <div class="watermark">12</div>
+  <div class="section-head reveal">
+    <div class="section-kicker">12 · Protocolo de Seguridad y Logística</div>
+    <h2>Un operativo <em>seguro</em> y coordinado</h2>
+  </div>
+  <div class="protocol">
+    <div class="proto-card reveal"><span class="pc-num">/ 01</span><h4>Recepción y Triaje</h4><p>Registro de niños y niñas, asignación de fichas de atención y organización del flujo por especialidad para evitar aglomeraciones.</p></div>
+    <div class="proto-card reveal d1"><span class="pc-num">/ 02</span><h4>Coordinación Médica</h4><p>Supervisión permanente del personal de salud, manejo de insumos, cadena de frío para vacunas y protocolos de bioseguridad.</p></div>
+    <div class="proto-card reveal d2"><span class="pc-num">/ 03</span><h4>Seguridad y Orden</h4><p>Coordinación con Protección Civil y seguridad municipal para el resguardo del espacio, las familias y los equipos médicos.</p></div>
+    <div class="proto-card reveal d3"><span class="pc-num">/ 04</span><h4>Cierre y Desmovilización</h4><p>Entrega de informes médicos, referencias, limpieza del espacio y desmontaje ordenado de los puestos de atención.</p></div>
+  </div>
+  <div class="proto-alert reveal">
+    <div class="pa-icon">🚑</div>
+    <p><strong>Emergencias:</strong> se contará con un punto de primeros auxilios, ambulancia de referencia y coordinación directa con el centro de salud más cercano para cualquier eventualidad que requiera atención de urgencia.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════ 13 · AGRADECIMIENTO ═══════════════════ -->
+<section class="section section--white" id="agradecimiento">
+  <div class="watermark">13</div>
+  <div class="thanks reveal">
+    <div class="t-icon">🩺</div>
+    <h2>Palabras de la Comisión</h2>
+    <div class="t-sub">Un compromiso con la salud de nuestra infancia</div>
+    <p>Desde la <strong>Comisión Permanente de Participación Ciudadana</strong>, expresamos nuestro más profundo agradecimiento a todos los médicos, especialistas, enfermeras, voluntarios, instituciones y aliados que hacen posible esta Jornada de Salud Pediátrica. Cada consulta, cada diagnóstico y cada sonrisa de un niño atendido es el resultado de un esfuerzo colectivo que nos enorgullece.</p>
+    <p>A los profesionales de la salud que donan su tiempo y conocimiento: ustedes son la columna vertebral de esta jornada. A las empresas y fundaciones que aportan recursos e insumos: su generosidad se traduce directamente en bienestar para cientos de familias. A la comunidad de Bello Campo: gracias por abrir sus puertas y confiar en este esfuerzo institucional.</p>
+    <p>Esta jornada no es un evento aislado; es una <strong>declaración de principios</strong>: la salud de nuestros niños y niñas es prioridad absoluta, y desde Chacao demostramos que cuando instituciones, sector privado y comunidad trabajan unidos, los resultados transforman vidas.</p>
+    <p><strong>¡Sumemos esfuerzos por la salud de quienes más lo necesitan!</strong></p>
+    <div class="thanks-sign">
+      <div class="ts-name">Yolanda Rivas</div>
+      <div class="ts-role">Presidenta de la Comisión Permanente de Participación Ciudadana</div>
+      <div class="ts-org">Concejo Municipal de Chacao</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ CONTRAPORTADA ═══════════════════ -->
+<footer class="back-cover">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <h2>La salud de un niño es el futuro de una comunidad entera. Llevar medicina especializada a quien más la necesita es <em>un acto de justicia</em>.</h2>
+  <div class="bc-phrase">Este dossier es una invitación abierta a construir juntos una jornada que transforme vidas.</div>
+
+  <div class="contact" style="margin-top:56px">
+    <div class="contact-card"><div class="cc-icon">📍</div><div class="cc-label">Sede</div><div class="cc-value">Sector Popular Bello Campo · Chacao</div></div>
+    <div class="contact-card"><div class="cc-icon">📅</div><div class="cc-label">Fecha</div><div class="cc-value">14 de Noviembre de 2026</div></div>
+    <div class="contact-card"><div class="cc-icon">📞</div><div class="cc-label">Teléfono / WhatsApp</div><div class="cc-value">0412-3740055</div></div>
+    <div class="contact-card"><div class="cc-icon">✉️</div><div class="cc-label">Correo electrónico</div><div class="cc-value">entornoinstitucional.cpcchacao@gmail.com</div></div>
+  </div>
+
+  <div class="bc-logos">
+    <div class="logo-slot"><img data-base="assets/logo-1" alt="Comisión"></div>
+    <div class="logo-slot"><img data-base="assets/logo-2" alt="Concejal"></div>
+  </div>
+  <div class="bc-org">
+    Comisión Permanente de Participación Ciudadana<br>
+    Concejo Municipal de Chacao<br>
+    Jornada de Salud Pediátrica · Bello Campo · 2026
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════════════════
+     🖼️ CARGADOR AUTOMÁTICO DE IMÁGENES
+════════════════════════════════════════════════════════ -->
+<script>
+(function(){
+  var EXT = ['png','jpg','jpeg','webp','gif','PNG','JPG','JPEG','WEBP','GIF'];
+  function cargar(img){
+    var base = img.getAttribute('data-base');
+    if(!base || img.getAttribute('data-procesado')) return;
+    img.setAttribute('data-procesado','true');
+    var i = 0;
+    img.onerror = function(){
+      i++;
+      if(i < EXT.length){ img.src = base + '.' + EXT[i]; }
+      else { img.onerror = null; fallo(img, base); }
+    };
+    img.src = base + '.' + EXT[0];
+  }
+  function fallo(img, base){
+    if(img.hasAttribute('data-optional')){ img.style.display = 'none'; return; }
+    var p = img.parentElement;
+    if(p){
+      p.classList.add('img-error-state');
+      p.innerHTML = '<div class="img-error-msg">❌ Imagen no encontrada<b>' + base + '.[ext]</b><span>Colócala en la carpeta assets</span></div>';
+    }
+  }
+  function iniciar(){
+    var imgs = document.querySelectorAll('img[data-base]');
+    for(var k=0;k<imgs.length;k++){ cargar(imgs[k]); }
+  }
+  if(document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', iniciar); }
+  else { iniciar(); }
+})();
+</script>
+
+<!-- Barra de progreso + animaciones -->
+<script>
+const progress=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const pct=(h.scrollTop)/(h.scrollHeight-h.clientHeight)*100;
+  progress.style.width=pct+'%';
+},{passive:true});
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+
+</body>
+</html>
